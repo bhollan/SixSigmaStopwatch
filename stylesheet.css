@@ -1,0 +1,17 @@
+document {background-image: url(http://image.naldzgraphics.net/2012/12/10-ten-BlackDiamond.jpg) repeat;}
+
+p {font-family:sans-serif;}
+
+div {background-color:grey;
+	 border-radius:20%;
+	 margin:0;
+	 padding:0;}
+	 
+.numbers {
+	width:10px;
+	font-family:digital,arial;}
+	 
+@font-face {
+	font-family:'digital';
+	src:url('http://www.fontspace.com/style-7/digital-7?text=&fontsize=100&foreground=000000&background=FFFFFF')
+}
