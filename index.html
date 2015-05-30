@@ -9,7 +9,7 @@
 
 <!-- LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH -->
 <body onload="createStopwatch();">
-    <a id="forkme_banner" href="https://github.com/bhollan/RainbowBars">View on GitHub</a>
+    <a id="forkme_banner" href="https://github.com/bhollan/SixSigmaStopwatch">View on GitHub</a>
 <script>
 createStopwatch = function () {
 stopwatch = new StopWatch();
@@ -133,7 +133,12 @@ function redraw(input) {
 	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); redraw(stopwatch.splits);" />
 	<input id="stop" name="controls" type="radio" onClick="stopwatch.stop();  redraw(stopwatch.splits);" />
 	<input id="reset" name="controls" type="radio" onClick="stopwatch.reset();  redraw(stopwatch.splits);" />
-	<div class="timer">
+    <div id="timer_controls">
+		<label for="start">Start / Split</label>
+		<label for="stop">Stop</label>
+		<label for="reset">Reset</label>
+	</div>
+    <div class="timer">
 		<div class="cell">
 			<div class="numbers tenhour moveten">0 1 2 3 4 5 6 7 8 9</div>
 		</div>
@@ -166,10 +171,5 @@ function redraw(input) {
 		</div>
 	</div>
 	<!-- Labels for the controls -->
-	<div id="timer_controls">
-		<label for="start">Start / Split</label>
-		<!-- <label for="split">Split</label>-->
-		<label for="stop">Stop</label>
-		<label for="reset">Reset</label>
-	</div>
+	
 </div>
