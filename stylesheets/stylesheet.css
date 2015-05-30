@@ -5,7 +5,7 @@ body{
     font: 10px sans-serif;
 }
 
-.bar rect {
+.bars rect {
     fill: steelblue;
     shape-rendering: crispEdges;
 }
@@ -23,14 +23,16 @@ body{
 /*document {background-image: url(http://image.naldzgraphics.net/2012/12/10-ten-BlackDiamond.jpg) repeat;}*/
 
 p {font-family:sans-serif;}
+/*
 
 div {background-color:grey;
 	 border-radius:20%;
 	 margin:0;
 	 padding:0;}
+*/
 	 
 svg {
-    background-color: aliceblue;
+    background-color:darkblue;
   display:block;
   margin:auto;
 }
@@ -149,5 +151,5 @@ the other one with 6 steps and 6 digits*/
 /*Lets use a better font for the numbers*/
  @font-face { 
  	font-family: 'digital'; 
- 	src: url('fonts/DS-DIGI.TTF') format('truetype');
+ 	src: url('../fonts/DS-DIGI.TTF') format('truetype');
  }
