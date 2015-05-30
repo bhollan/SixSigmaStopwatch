@@ -1,12 +1,14 @@
 * {margin: 0; padding: 0;}
 
 body{
-    background: url('http://thumbs.dreamstime.com/x/steel-diamond-plate-background-903381.jpg') repeat;
+    background: url('../images/steel-diamond-plate-background-903381.jpg') repeat;
     font: 10px sans-serif;
+    opacity: 10%;
 }
 
 .bars rect {
-    fill: steelblue;
+    fill:#333333;
+/*    color: dimgrey*/
     shape-rendering: crispEdges;
 }
 
@@ -20,19 +22,10 @@ body{
     shape-rendering: crispEdges;
 }
 
-/*document {background-image: url(http://image.naldzgraphics.net/2012/12/10-ten-BlackDiamond.jpg) repeat;}*/
-
 p {font-family:sans-serif;}
-/*
-
-div {background-color:grey;
-	 border-radius:20%;
-	 margin:0;
-	 padding:0;}
-*/
 	 
 svg {
-    background-color:darkblue;
+    background-color:gainsboro;
   display:block;
   margin:auto;
 }
