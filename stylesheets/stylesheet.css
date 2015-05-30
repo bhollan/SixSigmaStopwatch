@@ -1,14 +1,31 @@
 * {margin: 0; padding: 0;}
 
 body{
-    background: url('../images/steel-diamond-plate-background-903381.jpg') repeat;
+/*    background: url('../images/steel-diamond-plate-background-903381.jpg') repeat;*/
+    background:grey;
     font: 10px sans-serif;
     opacity: 10%;
 }
 
+a#forkme_banner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 138px;
+  height: 138px;
+  display: block;
+  background: transparent url(../images/fork-sprite.png) 0 0 no-repeat;
+  text-indent: -9000px;
+  z-index: 3;
+}
+
+a#forkme_banner:hover {
+  background-position: 0 -138px;
+}
+
+
 .bars rect {
-    fill:#333333;
-/*    color: dimgrey*/
+    fill:steelblue;
     shape-rendering: crispEdges;
 }
 
@@ -25,9 +42,9 @@ body{
 p {font-family:sans-serif;}
 	 
 svg {
-    background-color:gainsboro;
-  display:block;
-  margin:auto;
+    background-color:grey;
+    display:block;
+    margin:auto;
 }
 
 .container {

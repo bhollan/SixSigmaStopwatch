@@ -1,5 +1,5 @@
 <head>
-<script src="http://thecodeplayer.com/uploads/js/prefixfree.js" type="text/javascript"></script>
+<script type="text/javascript" src="src/prefixfree.js"></script>
 <script type="text/javascript" src="src/Ziggy.js"></script>
 <script type="text/javascript" src="src/StopWatch.js"></script>
     
@@ -9,6 +9,7 @@
 
 <!-- LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH -->
 <body onload="createStopwatch();">
+    <a id="forkme_banner" href="https://github.com/bhollan/RainbowBars">View on GitHub</a>
 <script>
 createStopwatch = function () {
 stopwatch = new StopWatch();
@@ -31,6 +32,15 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    
+var border = svg.append("rect")
+            .attr("x", 0)
+            .attr("y", 0)
+            .attr("height", height + margin.top + margin.bottom - 36)
+            .attr("width", width + margin.left + margin.right - 34)
+            .style("stroke", "#000000")
+            .style("fill", "none")
+            .style("stroke-width", 1);
 
 function redraw(input) {
 	
@@ -88,6 +98,8 @@ function redraw(input) {
 				formatMinutes);
 		
 		bar
+                .attr("stroke-width", 1 )
+                .attr("stroke", "#000000" )
 			.transition()
 			.duration(200)
 				.attr("transform", function (d) {return "translate(" + x(d.x) + "," + y(d.y) + ")"})
