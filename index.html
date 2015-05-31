@@ -114,7 +114,6 @@ function redraw(input) {
 	};
 
 	function sampleGenerator() {
-// 		var values = d3.range(1000).map(d3.random.logNormal(Math.log(30), .4));
 		var values = d3.range(1000).map(d3.random.irwinHall(44,1.2));
 		return values;
 	};

@@ -48,7 +48,7 @@ svg {
 }
 
 .container {
-	padding: 50px;
+	padding: 30px;
 	text-align: center;
 	background-color:grey;
 }
@@ -67,12 +67,25 @@ svg {
 		0 5px 20px -10px rgba(0, 0, 0, 1);
 }
 
+
+.cell divider {
+	/*Should only display 1 digit. Hence height = line height of .numbers
+	and width = width of .numbers*/
+	width: 0.30em;
+	height: 60px;
+	font-size: 84px;
+	overflow: hidden;
+	position: relative;
+	float: left;
+}
+
+
 .cell {
 	/*Should only display 1 digit. Hence height = line height of .numbers
 	and width = width of .numbers*/
 	width: 0.60em;
-	height: 40px;
-	font-size: 50px;
+	height: 60px;
+	font-size: 84px;
 	overflow: hidden;
 	position: relative;
 	float: left;
@@ -80,7 +93,7 @@ svg {
 
 .numbers {
 	width: 0.6em;
-	line-height: 40px;
+	line-height: 60px;
 	font-family: digital, arial, verdana;
 	text-align: center;
 	color: #fff;
@@ -105,10 +118,10 @@ svg {
 	padding: 30px 20px;
 	background: #efefef;
 	font-family: arial, verdana, tahoma;
-	font-size: 22px;
+	font-size: 30px;
 	border-radius: 3 3 0px 0px;
-    margin-left:  3px;
-    margin-right: 3px;
+    margin-left:  40px;
+    margin-right: 40px;
 }
 input[name="controls"] {display: none;}
 
@@ -151,13 +164,13 @@ Hence we need to create 2 animations. One with 10 steps and 10 digits and
 the other one with 6 steps and 6 digits*/
 @keyframes moveten {
 	0% {top: 0;}
-	100% {top: -400px;} 
+	100% {top: -600px;} 
 	/*height = 40. digits = 10. hence -400 to move it completely to the top*/
 }
 
 @keyframes movesix {
 	0% {top: 0;}
-	100% {top: -240px;} 
+	100% {top: -360px;} 
 	/*height = 40. digits = 6. hence -240 to move it completely to the top*/
 }
 
