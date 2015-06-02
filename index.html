@@ -100,7 +100,7 @@ function redraw(input) {
 				.attr("height", 0);
     
         gMan.append("text")
-                .attr("class","text");
+                .attr("class","barheights");
                 
 		var xAxis = d3.svg.axis()
                     .scale(x)
@@ -132,10 +132,11 @@ function redraw(input) {
                 .attr("dy", ".75em")
                 .attr("y", 6)
                 .attr("x", barWidth/2)
+                .style("stroke-width","0")      //'stroke-width' was inherited to here and needed resetting
                 .attr("text-anchor", "middle")
                 .text(function(d) { return (d.y > 0) ? formatCount(d.y) : " "; });
     
-    //.style("stroke-width","0")      //'stroke-width' was inherited to here and needed resetting
+    
     
 	};
 
