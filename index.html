@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <head>
 <script type="text/javascript" src="src/prefixfree.js"></script>
 <script type="text/javascript" src="src/Ziggy.js"></script>
@@ -5,7 +6,12 @@
     
 <link rel="stylesheet" href="stylesheets/stylesheet.css"
 </head>
-
+<style>
+.bar text {
+    fill:#ffffff;
+};
+    
+</style>
 
 <!-- LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH -->
 <body onload="createStopwatch();">
@@ -100,9 +106,8 @@ function redraw(input) {
 				.attr("height", 0);
     
         gMan.append("text")
-                .attr("class","barheights")
+                .attr("class","barheights");
                 
-
 		var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
@@ -133,6 +138,7 @@ function redraw(input) {
                 .attr("dy", ".75em")
                 .attr("y", 6)
                 .attr("x", barWidth/2)
+                .style("fill","red")
                 .attr("text-anchor", "middle")
                 .text(function(d) { return (d.y > 0) ? formatCount(d.y) : " "; });
     
