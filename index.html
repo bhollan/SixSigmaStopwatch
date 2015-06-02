@@ -24,7 +24,7 @@ stopwatch = new StopWatch();
 
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    height = 550 - margin.top - margin.bottom;
     
 
 var svg = d3.select("body").append("svg")
@@ -35,7 +35,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
     
-var border = svg.append("rect")
+var border = svg.append("rect")             //border around entire graph area
             .attr("x", 0)
             .attr("y", 0)
             .attr("height", height + margin.top + margin.bottom - 36)
@@ -57,7 +57,7 @@ function redraw(input) {
 		
 		// Formatters for counts and times (converting numbers to Dates). 
 		var formatCount = d3.format(",.0f"), 
-            formatTime = d3.time.format("%M:%S"),
+            formatTime = d3.time.format("%H:%M:%S"),
             formatMinutes = function(d) {
 			 return formatTime(new Date(2012, 0, 1, 0, d));
 		    };
@@ -81,7 +81,7 @@ function redraw(input) {
 				.domain([ 0, d3.max(data, function(d) {	return d.y;	}) ])
 				.range([ height, 0 ]);
 		
-		var barWidth = 30;
+		var barWidth = 46;
 		
 		var bar = svg.selectAll("g").
 				data(data);
@@ -111,8 +111,10 @@ function redraw(input) {
         svg.append("g")
             .attr("class","x axis")
             .attr("transform","translate (0," + height + ")")
-            .call(xAxis);
-    
+            .call(xAxis)
+            .selectAll("text")
+            .attr("transform",function() {return "rotate (-65)" })
+            .style("text-anchor","end");
     
 		bar
                 .attr("stroke-width", 1 )

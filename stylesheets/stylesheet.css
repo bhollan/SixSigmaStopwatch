@@ -113,13 +113,13 @@ svg {
     margin-bottom: 24px;
 }
 #timer_controls label {
- 	user-select:none;   /*<-- This property is not 100% cross-browser*/
+ 	-webkit-user-select:none;   /*<-- This property is not 100% cross-browser*/
 	cursor: pointer;
 	padding: 30px 20px;
 	background: #efefef;
 	font-family: arial, verdana, tahoma;
 	font-size: 30px;
-	border-radius: 3 3 0px 0px;
+	border-radius: 5px 5px 0px 0px;
     margin-left:  40px;
     margin-right: 40px;
 }
