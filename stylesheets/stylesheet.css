@@ -4,7 +4,6 @@ body{
 /*    background: url('../images/steel-diamond-plate-background-903381.jpg') repeat;*/
     background:grey;
     font: 10px sans-serif;
-    opacity: 10%;
 }
 
 a#forkme_banner {
@@ -188,9 +187,14 @@ the other one with 6 steps and 6 digits*/
     padding:20;
     border: 3px black solid;
     font-size:35;
+};
+
+a.deleteX {
+    font-size:35;
+    cursor:pointer;
 }
 
-#deleteX {
+.deleteX {
     cursor:pointer;
     font-size:30;
-}
+};
