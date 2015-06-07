@@ -183,18 +183,21 @@ the other one with 6 steps and 6 digits*/
 /***************styling for split times*******************/
 
 .splitTime {
-    margin:20;
-    padding:20;
+    margin:20px;
+    padding:20px;
     border: 3px black solid;
-    font-size:35;
+    font-size:35px;
+    cursor:default;
 };
 
 a.deleteX {
     font-size:35;
     cursor:pointer;
+    margin:10px;
+    padding:10px;
 }
 
 .deleteX {
     cursor:pointer;
-    font-size:30;
+    font-size:30px;
 };
