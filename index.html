@@ -3,6 +3,7 @@
 <script type="text/javascript" src="src/prefixfree.js"></script>
 <script type="text/javascript" src="src/Ziggy.js"></script>
 <script type="text/javascript" src="src/StopWatch.js"></script>
+<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
     
 <link rel="stylesheet" href="stylesheets/stylesheet.css"
 </head>
@@ -18,7 +19,6 @@ stopwatch = new StopWatch();
 </script>
 
 <body>
-<script src="http://d3js.org/d3.v2.min.js?2.10.0"></script>
 <script>
 
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
@@ -57,22 +57,32 @@ function redraw(input) {
 		
 		// Formatters for counts and times (converting numbers to Dates). 
 		var formatCount = d3.format(",.0f");
+          
+        var formatForAxis = function(d) {
+            //ALL this nonsense is because the time format I want is not a built-in in D3
+            //AND the padding switching is somehow not working
+            //https://github.com/mbostock/d3/issues/1483
+            var formatString = "";
+            if (d > 3600000) //Hours in Milliseconds = 1000*60*60 = 3,600,000
+                {formatString = "%H:%M:%S.%L";}
+            else if (d > 60000) //Minutes = 1000*60 = 60000
+                {formatString = "%M:%S.%L";}
+            else if (d > 1000) //Seconds = 1000
+                {formatString = "%S.%L";}
+            else //Milliseconds = 1
+                {formatString = "0.%L";};
+                
+                formatTime = d3.time.format(formatString);
+                return formatTime(new Date(2012, 0, 1, 0, 0, 0, d));
+        };
         
-        var formatTime = d3.time.format("%H:%M:%S.%L");    // <----NEDS WORK!
-            
-        var formatMinutes = function(d) {
-			 return formatTime(new Date(2012, 0, 1, 0, d));
-		    };
-    
 		var margin = {top : 10,	right : 50,	bottom : 30, left : 50},
 			width = 960 - margin.left - margin.right,
 			height = 500 - margin.top - margin.bottom;
-
-		var numberOfBins = 20
 		
         //create an array of arrays
 		var data = d3.layout.histogram()
-				.bins(numberOfBins)(input);
+				.bins(50)(input);
 		
         //create x and y scales
 		var x = d3.scale.linear()
@@ -82,22 +92,17 @@ function redraw(input) {
 		var y = d3.scale.linear()
 				.domain([ 0, d3.max(data, function(d) {	return d.y;	}) ])
 				.range([ height, 0 ]);
-
-		var barWidth = 40;
 		
         //Bind the data for this 'click'
 		var bar = svg.selectAll("g").
 				data(data);
-						
+        
 		bar.exit().remove();
 		
 		var gMan = bar.enter().append("g")
 				.attr("class", "bars")
-				.attr("transform", function(d,i) {return "translate(" + x(d.x) + "," + y(d.y) + ")";	});
-        console.log(gMan);
-    
-    //.attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; });
-		
+				.attr("transform", function(d) {return "translate(" + x(d.x) + "," + y(d.y) + ")";	});
+        		
 		gMan.append("rect")
 				.attr("class","rects")
 				.attr("x",0)
@@ -113,8 +118,8 @@ function redraw(input) {
 		var xAxis = d3.svg.axis()
                     .scale(x)
                     .orient("bottom")
-                    .ticks(numberOfBins)
-                    .tickFormat(formatMinutes);
+                    .ticks(25)
+                    .tickFormat(formatForAxis);
     
         svg.append("g")                       //add x-axis
             .attr("class","x axis")
@@ -129,20 +134,20 @@ function redraw(input) {
 			.duration(200)
 				.attr("transform", function (d) {return "translate(" + x(d.x) + "," + y(d.y) + ")"})
 				.attr("height", function(d) {return height - y(d.y);});
-		
-    
-    
+        
         //re-bind the data so elements aren't still bound to the first 'click's data
 		bar = d3.selectAll(".rects").data(data)
 			.transition()
 			.duration(200)
-				.attr("width",barWidth)
+				.attr("width", function(d) {
+            return x(d.dx + x.domain()[0]);      //this is one of the strangest lines of code I've ever written
+            }) //barWidth
 				.attr("height", function(d) {return height - y(d.y)});
     
         bar = d3.selectAll(".barheights").data(data)
                 .attr("dy", ".75em")
                 .attr("y", 6)
-                .attr("x", barWidth/2)
+                .attr("x", function(d) { return x(d.dx + x.domain()[0])/2;})
                 .attr("text-anchor", "middle")
                 .text(function(d) { return (d.y > 0) ? formatCount(d.y) : " "; });
 	};
@@ -161,7 +166,7 @@ function redraw(input) {
 <title>Testing, attention please sir!</title>
 
 <div class="container">
-	<!-- stopwatch controls -->
+	<!-- stopwatch control code -->
 	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); redraw(stopwatch.splits);" />
 	<input id="stop" name="controls" type="radio" onClick="stopwatch.stop();  redraw(stopwatch.splits);" />
 	<input id="reset" name="controls" type="radio" onClick="stopwatch.reset();  redraw(stopwatch.splits);" />
@@ -191,7 +196,7 @@ function redraw(input) {
 		<div class="cell">
 			<div class="numbers second moveten">0 1 2 3 4 5 6 7 8 9</div>
 		</div>
-		<div class="cell divider"><div class="numbers">:</div></div>
+		<div class="cell divider" id="decimal"><div class="numbers">.</div></div>
  		<div class="cell">
  			<div class="numbers milisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
  		</div>
