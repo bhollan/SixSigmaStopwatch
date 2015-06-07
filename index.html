@@ -64,9 +64,9 @@ function redraw(input) {
             //https://github.com/mbostock/d3/issues/1483
             var formatString = "";
             if (d > 3600000) //Hours in Milliseconds = 1000*60*60 = 3,600,000
-                {formatString = "%H:%M:%S.%L";}
+                {formatString = "%H:%M:%S";}
             else if (d > 60000) //Minutes = 1000*60 = 60000
-                {formatString = "%M:%S.%L";}
+                {formatString = "%M:%S";}
             else if (d > 1000) //Seconds = 1000
                 {formatString = "%S.%L";}
             else //Milliseconds = 1
@@ -209,3 +209,20 @@ function redraw(input) {
 	</div>
 	
 </div>
+    
+    <table>
+        <tr>
+            <td id = "time0" ><div class="splitTime">00:00:00.457
+                        <a class="deleteX" onclick="d3.select('#time0').remove()">&times;</a>
+                </div>
+            </td>
+            <td id = "time1" ><div class="splitTime">00:00:15.457
+                        <a class="deleteX" onclick="d3.select('#time1').remove()">&times;</a>
+                </div>
+            </td>
+            <td id = "time2"><div class="splitTime">00:01:45.457
+                        <a class="deleteX" onclick="d3.select('#time2').remove()">&times;</a>
+                </div>
+            </td>
+        </tr>
+    </table>

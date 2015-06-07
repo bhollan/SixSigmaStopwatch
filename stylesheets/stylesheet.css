@@ -179,3 +179,18 @@ the other one with 6 steps and 6 digits*/
  	font-family: 'digital'; 
  	src: url('../fonts/DS-DIGI.TTF') format('truetype');
  }
+
+
+/***************styling for split times*******************/
+
+.splitTime {
+    margin:20;
+    padding:20;
+    border: 3px black solid;
+    font-size:35;
+}
+
+#deleteX {
+    cursor:pointer;
+    font-size:30;
+}
