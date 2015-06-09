@@ -8,14 +8,15 @@
 <link rel="stylesheet" href="stylesheets/stylesheet.css"
 </head>
 
-<!-- LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH -->
+
 <body onload="createStopwatch();">
     <a id="forkme_banner" href="https://github.com/bhollan/SixSigmaStopwatch">View on GitHub</a>
 <script>
+// LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH
 createStopwatch = function () {
 stopwatch = new StopWatch();
 };
-// THIS IS ALL THAT MUST RUN FOR THE STOPWATCH BRAINS TO WORK
+// ^-- THIS IS ALL THAT MUST RUN FOR THE STOPWATCH BRAINS TO WORK
 </script>
 
 <body>
@@ -23,7 +24,7 @@ stopwatch = new StopWatch();
 
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 985 - margin.left - margin.right,
-    height = 575 - margin.top - margin.bottom;
+    height = 425 - margin.top - margin.bottom;
     
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
@@ -43,7 +44,43 @@ var border = d3.select("svg").append("rect")             //border around entire 
             .style("stroke", "#000000")
             .style("fill", "none")
             .style("stroke-width", 1);
+    
+var x = d3.scale.linear()
+            .range([ 0, width ]);
+    
+var y = d3.scale.linear()
+            .range([ height, 0 ]);
 
+var formatForAxis = function(d) {
+            //ALL this nonsense is because the time format I want is not a built-in in D3
+            //AND the padding switching is somehow not working
+            //https://github.com/mbostock/d3/issues/1483
+            var formatString = "";
+            if (d >= 3600000) //Hours in Milliseconds = 1000*60*60 = 3,600,000
+                {formatString = "%H:%M:%S";}
+            else if (d >= 60000) //Minutes = 1000*60 = 60000
+                {formatString = "%M:%S";}
+            else if (d >= 1000) //Seconds = 1000
+                {formatString = "%S.%L";}
+            else //Milliseconds = 1
+                {formatString = "0.%L";};
+                
+                formatTime = d3.time.format(formatString);
+                return formatTime(new Date(2012, 0, 1, 0, 0, 0, d));
+        };
+    
+var xAxis = d3.svg.axis()
+            .scale(x)
+            .orient("bottom")
+            .tickFormat(formatForAxis);
+
+svg.append("g")                       //add x-axis
+            .attr("class","axis")
+            .call(xAxis)
+            .selectAll("text")
+            .attr("transform",function() {return "rotate (-65)" })
+            .style("text-anchor","end");
+    
 function redraw(input) {
 	
 		//it doesnt make any sense to make a histogram of 2 points (0-point trimmed off in next segment)
@@ -58,43 +95,31 @@ function redraw(input) {
 		// Formatters for counts and times (converting numbers to Dates). 
 		var formatCount = d3.format(",.0f");
           
-        var formatForAxis = function(d) {
-            //ALL this nonsense is because the time format I want is not a built-in in D3
-            //AND the padding switching is somehow not working
-            //https://github.com/mbostock/d3/issues/1483
-            var formatString = "";
-            if (d > 3600000) //Hours in Milliseconds = 1000*60*60 = 3,600,000
-                {formatString = "%H:%M:%S";}
-            else if (d > 60000) //Minutes = 1000*60 = 60000
-                {formatString = "%M:%S";}
-            else if (d > 1000) //Seconds = 1000
-                {formatString = "%S.%L";}
-            else //Milliseconds = 1
-                {formatString = "0.%L";};
-                
-                formatTime = d3.time.format(formatString);
-                return formatTime(new Date(2012, 0, 1, 0, 0, 0, d));
-        };
-        
 		var margin = {top : 10,	right : 50,	bottom : 30, left : 50},
 			width = 960 - margin.left - margin.right,
-			height = 500 - margin.top - margin.bottom;
-		
+			height = 400 - margin.top - margin.bottom;
+    
+		//these x and y scales are different.  x will affect how the data gets binned, so must be done first.
+        //the y scale however, is based on the array of arrays that comes out of histogram(), so must be done after.
+        //note that 'input' becomes 'data' but is the same data points, just arranged differently.
+        //create x scale
+		x.domain([ d3.min(input), d3.max(input)]).nice()
+            .range([ 0, width ]);
+        
+        var binBandwidth = 2;  // This is a unitless cheat factor for 'rough' bins vs 'sharp' bins.  For later devlopment.
+    
+        var numberOfBins = Math.ceil(Math.sqrt(input.length))*binBandwidth;
+    
         //create an array of arrays
 		var data = d3.layout.histogram()
-				.bins(50)(input);
-		
-        //create x and y scales
-		var x = d3.scale.linear()
-				.domain([ d3.min(data, function(d) {return d.x}), d3.max(data, function(d) { return d.x})])
-				.range([ 0, width ]);
-
-		var y = d3.scale.linear()
-				.domain([ 0, d3.max(data, function(d) {	return d.y;	}) ])
-				.range([ height, 0 ]);
-		
+				.bins(x.ticks(numberOfBins))(input);
+    
+        //create y scale
+        y.domain([ 0, d3.max(data, function(d) {return d.y;})])
+            .range([ height, 0 ]);
+    
         //Bind the data for this 'click'
-		var bar = svg.selectAll("g").
+		var bar = svg.selectAll(".bars").
 				data(data);
         
 		bar.exit().remove();
@@ -114,20 +139,6 @@ function redraw(input) {
     
         gMan.append("text")
                 .attr("class","barheights");
-                
-		var xAxis = d3.svg.axis()
-                    .scale(x)
-                    .orient("bottom")
-                    .ticks(25)
-                    .tickFormat(formatForAxis);
-    
-        svg.append("g")                       //add x-axis
-            .attr("class","x axis")
-            .attr("transform","translate (0," + height + ")")
-            .call(xAxis)
-            .selectAll("text")
-            .attr("transform",function() {return "rotate (-65)" })
-            .style("text-anchor","end");
     
 		bar                                   //box around each bar
 			.transition()
@@ -150,6 +161,13 @@ function redraw(input) {
                 .attr("x", function(d) { return x(d.dx + x.domain()[0])/2;})
                 .attr("text-anchor", "middle")
                 .text(function(d) { return (d.y > 0) ? formatCount(d.y) : " "; });
+    
+        d3.select('.axis')
+            .attr("transform","translate (0," + height + ")")
+            
+            .transition()
+            .duration(200)
+            .call(xAxis);
 	};
 
     //Generates/plots chart on pageload
