@@ -86,7 +86,7 @@ svg.append("g")                       //add x-axis
             .selectAll("text")
             .attr("transform",function() {return "rotate (-65)" })
             .style("text-anchor","end");
-    
+
 function redraw(input) {
 	
 		//it doesnt make any sense to make a histogram of 2 points (0-point trimmed off in next segment)
@@ -123,16 +123,30 @@ function redraw(input) {
         //create y scale
         y.domain([ 0, d3.max(data, function(d) {return d.y;})])
             .range([ height, 0 ]);
+        
+        //This function will highlight the table entries for the clicked bar, and the bar itself
+        function barClicked(input) {
+            //this is the anonymous function that barClicked returns
+            return function() {
+                var brightCount = d3.selectAll("#bright")[0].length;
+//                d3.selectAll("g #bright").enter().attr("id","bright");
+                d3.select(this.firstChild).attr("id","bright");
+                if (brightCount === d3.selectAll("#bright")[0].length) {
+                    d3.select(this.firstChild).attr("id","")};
+                d3.event.stopPropagation();
+            };
+        };
     
         //Bind the data for this 'click'
 		var bar = svg.selectAll(".bars").
 				data(data);
         
 		bar.exit().remove();
-		
+
 		var gMan = bar.enter().append("g")
 				.attr("class", "bars")
-				.attr("transform", function(d) {return "translate(" + x(d.x) + "," + y(d.y) + ")";	});
+				.attr("transform", function(d) {return "translate(" + x(d.x) + "," + y(d.y) + ")";	})
+                .on("click", barClicked(event));
         		
 		gMan.append("rect")
 				.attr("class","rects")
@@ -233,7 +247,18 @@ function redraw(input) {
 	</div>
 	
 </div>
-<!--
+
+<!--<div class="panel panel-default">-->
+<!--   Default panel contents -->
+<!--  <div class="panel-heading">Panel heading</div>-->
+<!---->
+<!--   Table -->
+<!--  <table class="table">-->
+<!--    -->
+<!--  </table>-->
+<!--</div>-->
+    
+    <!--
     
     <table class = "splitTable">
         <tr>
