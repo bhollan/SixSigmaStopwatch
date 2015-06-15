@@ -28,6 +28,17 @@ stopwatch = new StopWatch();
 <body>
 <script>
 
+    //this function 'restarts' the css animation of the top display
+    //there is no native way to do this in css, so it's a bit weird
+    //you have to strip the element of it's animation, and then re-apply it
+    //that's basically what we're doing with the 'reset' button anyway
+function resetSplitDisplay() {
+    var tmr = d3.select("#splitDisplay")[0][0];  //desired object inside 1-item array within another 1-item array
+    var cln = tmr.cloneNode(true);    //'true' = [deep] parameter to clone children too
+    tmr.remove();
+    document.getElementById("container").appendChild(cln);
+};    
+    
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 985 - margin.left - margin.right,
     height = 425 - margin.top - margin.bottom;
@@ -36,7 +47,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
 
-//    THIS CODE ADDED 'CLICK TO START/SPLIT' IF USER CLICKED GRAPH, BUT DESIGN CHANGED
+//    THIS CODE ADDS 'CLICK TO START/SPLIT' ON GRAPH CLICK, BUT DESIGN CHANGED
 //    .on("click", function() {stopwatch.start(); redraw(stopwatch.splits);})
 
   .append("g")
@@ -203,13 +214,15 @@ function redraw(input) {
 
 <title>Testing, attention please sir!</title>
 
-<div class="container">
+<div class="container" id="container">
 	<!-- stopwatch control code -->
-	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); redraw(stopwatch.splits);" />
+	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); redraw(stopwatch.splits);" />
+<!--    <input id="split" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); redraw(stopwatch.splits);" />-->
 	<input id="stop" name="controls" type="radio" onClick="stopwatch.stop();  redraw(stopwatch.splits);" />
 	<input id="reset" name="controls" type="radio" onClick="stopwatch.reset();  redraw(stopwatch.splits);" />
     <div id="timer_controls">
 		<label for="start">Start / Split</label>
+<!--        <label for="split">Split</label>-->
 		<label for="stop">Stop</label>
 		<label for="reset">Reset</label>
 	</div>
@@ -236,18 +249,50 @@ function redraw(input) {
 		</div>
 		<div class="cell divider" id="decimal"><div class="numbers">.</div></div>
  		<div class="cell">
- 			<div class="numbers milisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+ 			<div class="numbers millisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
  		</div>
 		<div class="cell">
-			<div class="numbers tenmilisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+			<div class="numbers tenmillisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
 		</div>
 		<div class="cell">
-			<div class="numbers hundredmilisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+			<div class="numbers hundredmillisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+	</div>
+	<!--SECONDARY TIMER FOR SPLITS-->
+    <div class="timer" id = "splitDisplay" >
+		<div class="cell">
+			<div class="numbers tenhour moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+		<div class="cell">
+			<div class="numbers hour moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+		<div class="cell divider"><div class="numbers">:</div></div>
+		<div class="cell">
+			<div class="numbers tenminute movesix">0 1 2 3 4 5 6</div>
+		</div>
+		<div class="cell">
+			<div class="numbers minute moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+		<div class="cell divider"><div class="numbers">:</div></div>
+		<div class="cell">
+			<div class="numbers tensecond movesix">0 1 2 3 4 5 6</div>
+		</div>
+		<div class="cell">
+			<div class="numbers second moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+		<div class="cell divider" id="decimal"><div class="numbers">.</div></div>
+ 		<div class="cell">
+ 			<div class="numbers millisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+ 		</div>
+		<div class="cell">
+			<div class="numbers tenmillisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
+		</div>
+		<div class="cell">
+			<div class="numbers hundredmillisecond moveten">0 1 2 3 4 5 6 7 8 9</div>
 		</div>
 	</div>
 	
 </div>
-
 <!--<div class="panel panel-default">-->
 <!--   Default panel contents -->
 <!--  <div class="panel-heading">Panel heading</div>-->
@@ -257,23 +302,3 @@ function redraw(input) {
 <!--    -->
 <!--  </table>-->
 <!--</div>-->
-    
-    <!--
-    
-    <table class = "splitTable">
-        <tr>
-            <td id = "time0" ><div class="splitTime">00:00:00.457
-                        <a class="deleteX" onclick="d3.select('#time0').remove()">&times;</a>
-                </div>
-            </td>
-            <td id = "time1" ><div class="splitTime">00:00:15.457
-                        <a class="deleteX" onclick="d3.select('#time1').remove()">&times;</a>
-                </div>
-            </td>
-            <td id = "time2"><div class="splitTime">00:01:45.457
-                        <a class="deleteX" onclick="d3.select('#time2').remove()">&times;</a>
-                </div>
-            </td>
-        </tr>
-    </table>
--->
