@@ -11,7 +11,6 @@ describe("The Ziggurat", function(){
 	
 	afterEach(function() {
 		zig.points.sort();
-		console.log(zig);
 	});
 	
 	it("should be defined", function(){
@@ -38,7 +37,6 @@ describe("The Ziggurat", function(){
 		expect(zig.points.length).toEqual(100);
 		zig.population = 300;
 		zig.buildZiggy();
-		console.log(zig);
 		expect(zig.points.length).toEqual(300);
 	});
 	

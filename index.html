@@ -15,19 +15,19 @@ The below wall of seeming garbage is the actual encoded image for the favicon
 </head>
 
 
-<body onload="createStopwatch();">
+<body onload="firstRun(true);">
     <a id="forkme_banner" href="https://github.com/bhollan/SixSigmaStopwatch">View on GitHub</a>
+
 <script>
-// LOAD THE JAVASCRIPT BRAINS OF THE CSS/HTML STOPWATCH
+
 createStopwatch = function () {
 stopwatch = new StopWatch();
 };
-// ^-- THIS IS ALL THAT MUST RUN FOR THE STOPWATCH BRAINS TO WORK
-</script>
 
-<body>
-<script>
-
+firstRun = function (input) {
+    var notRunYet = input;
+};
+    
     //this function 'restarts' the css animation of the top display
     //there is no native way to do this in css, so it's a bit weird
     //you have to strip the element of it's animation, and then re-apply it
@@ -37,7 +37,7 @@ function resetSplitDisplay() {
     var cln = tmr.cloneNode(true);    //'true' = [deep] parameter to clone children too
     tmr.remove();
     document.getElementById("container").appendChild(cln);
-};    
+};
     
 var margin = {top: 10, right: 30, bottom: 30, left: 30},
     width = 985 - margin.left - margin.right,
@@ -140,10 +140,10 @@ function redraw(input) {
             //this is the anonymous function that barClicked returns
             return function() {
                 var brightCount = d3.selectAll("#bright")[0].length;
-//                d3.selectAll("g #bright").enter().attr("id","bright");
                 d3.select(this.firstChild).attr("id","bright");
                 if (brightCount === d3.selectAll("#bright")[0].length) {
-                    d3.select(this.firstChild).attr("id","")};
+                    d3.select(this.firstChild).attr("id","")
+                };
                 d3.event.stopPropagation();
             };
         };
@@ -201,31 +201,59 @@ function redraw(input) {
             .call(xAxis);
 	};
 
-    //Generates/plots chart on pageload
+//Generates/plots chart on pageload
+
+createStopwatch();
     function sampleGenerator() {
         var values = d3.range(1000).map(d3.random.irwinHall(11,1.2));
-        return values.map(function(d) {return d*1000});
+        return values.map(function(d) {return Math.round(d*1000)});
     };
-	var values = sampleGenerator();
-	redraw(values);
-</script>
+var values = sampleGenerator();
+stopwatch.importTestArray(values);  //this is done to save exception code in remove()
+redraw(stopwatch.splits);
+  
+    //for each bar that is selected for removal, we must remove the data from stopwatch.splits
+    //removing the data in stopwatch.splits will keep the instance of stopwatch correct, and
+    //the bar wil remove itself when redraw() is called once the data is removed.
+function clearTimes() {
+    var toClear = d3.selectAll("#bright");
+        if ( toClear[0].length === 0 ) {return;} ;
+    toClear.attr("id","");                                                          //remove 'bright' id
     
+    var corners = toClear[0].map(function(d,i){return d.parentNode.__data__.x;})    //extract the bottom-left corner's x location
+    var widths  = toClear[0].map(function(d,i){return d.parentNode.__data__.dx;})   //all the same, but the filter() will be simpler
+    var limits = [corners, corners.map(function(d,i){return d + widths[i] ;})];     //formulating limits of each bar's band
+
+    //Helper function to screen stopwatch.splits
+    function checkTimes(point) {
+        return limits[0].every( 
+            function(d,i) {
+                return !( (d <= point) && (point < limits[1][i]) )                   //lower bound inclusive to mirror d3.histogram()
+            } 
+        );
+    };
+    
+    console.log("before: " + stopwatch.splits.length);
+    stopwatch.splits = stopwatch.splits.filter(checkTimes);
+    console.log(" after: " + stopwatch.splits.length);
+};
+
+</script>
+
 </body>
 
 <title>Testing, attention please sir!</title>
 
 <div class="container" id="container">
-	<!-- stopwatch control code -->
-	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); redraw(stopwatch.splits);" />
-<!--    <input id="split" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); redraw(stopwatch.splits);" />-->
+	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); firstRun(false); redraw(stopwatch.splits);" />
 	<input id="stop" name="controls" type="radio" onClick="stopwatch.stop();  redraw(stopwatch.splits);" />
 	<input id="reset" name="controls" type="radio" onClick="stopwatch.reset();  redraw(stopwatch.splits);" />
     <div id="timer_controls">
 		<label for="start">Start / Split</label>
-<!--        <label for="split">Split</label>-->
 		<label for="stop">Stop</label>
 		<label for="reset">Reset</label>
 	</div>
+    <div id = "clear_times" onClick="clearTimes(); redraw(stopwatch.splits);">Remove Selected<br> Bar(s)/Time(s)</div>
     <div class="timer">
 		<div class="cell">
 			<div class="numbers tenhour moveten">0 1 2 3 4 5 6 7 8 9</div>

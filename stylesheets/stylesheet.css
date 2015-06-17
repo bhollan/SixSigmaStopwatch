@@ -136,20 +136,40 @@ rect:hover {
 /*Styles for the controls*/
 #timer_controls {
 	margin-top: 5px;
-    margin-bottom: 24px;
+    margin-bottom: 0px;
+    display:inline-block;
 }
+
 #timer_controls label {
  	-webkit-user-select:none;   /*<-- This property is not 100% cross-browser*/
                                 /*There are workarounds, but they're huge, clunky, and not worth my time for a demo project*/
 	cursor: pointer;
-	padding: 30px 20px;
+	padding: 30px 10px;
 	background: #efefef;
 	font-family: arial, verdana, tahoma;
 	font-size: 30px;
 	border-radius: 5px 5px 0px 0px;
-    margin-left:  40px;
-    margin-right: 40px;
+    margin-left:  20px;
+    margin-right: 20px;
+    display:inline-block;
 }
+
+#clear_times {
+    -webkit-user-select:none;   /*<-- This property is not 100% cross-browser*/
+                                /*There are workarounds, but they're huge, clunky, and not worth my time for a demo project*/
+	margin-top: 5px;
+    margin-bottom: 0px;
+    cursor: pointer;
+	padding: 20px 15px;
+	background: #b3b3b3;
+	font-family: arial, verdana, tahoma;
+	font-size: 15px;
+	border-radius: 5px;
+    margin-left:  0px;
+    margin-right: 0px;
+    display:inline-block;
+}
+
 input[name="controls"] {display: none;}
 
 /*Control code*/
@@ -157,22 +177,6 @@ input[name="controls"] {display: none;}
 #start:checked~.timer .numbers {animation-play-state: running;}
 #split:checked~.timer .numbers {animation-play-state: running;}
 #reset:checked~.timer .numbers {animation: none;}
-
-/*
-#stop:checked~.timer2 .numbers {animation-play-state: paused;}
-#start:checked~.timer2 .numbers {animation-play-state: running;}
-#reset:checked~.timer2 .numbers {animation: none;}
-*/
-
-/*
-
-input[name="controls2"] {display: none;}
-
-Control code
-#stop2:checked~.timer2 .numbers {animation-play-state: paused;}
-#start2:checked~.timer2 .numbers {animation-play-state: running;}
-#reset2:checked~.timer2 .numbers {animation: none;}
-*/
 
 .moveten {
 	animation: moveten 1s steps(10, end) infinite;

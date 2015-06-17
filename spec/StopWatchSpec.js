@@ -56,8 +56,8 @@ describe("The StopWatch", function() {
 		stopwatch.addSplit();
 		stopwatch.stop();
 		
-		stopwatch.remove(1);
-		stopwatch.remove(3);
+		stopwatch.remove([1]);
+		stopwatch.remove([3]);
 		
 		expect(stopwatch.splits.length).toEqual(5);
 		expect(stopwatch.splits[6]).toBeUndefined();
@@ -80,32 +80,21 @@ describe("The Calculations", function() {
 		
 	});
 	
+    it("should create a test array", function() {
+		expect(zig.points.length).toEqual(100);
+	});
+    
 	it("should import a test array", function(){
 		stopwatch.importTestArray([2,4,4,4,5,5,7,9]);
 		expect(stopwatch.splits.length).toEqual(8);
 	});
 	
-	it("should create a test array", function() {
-		expect(zig.points.length).toEqual(100);
-		console.log(zig);
-	});
-	
 	it("should calculate the mean", function(){
+        stopwatch.importTestArray([2,4,4,4,5,5,7,9]);
+        stopwatch.reset();
 		expect(stopwatch.mean).toEqual(0.000);
 	});
 	
-	
 });
 
-describe("The Graphics Hooks", function(){
-	
-	var stopwatch;
-	stopwatch = new StopWatch();
-	
-	beforeEach(function () {
-		stopwatch = new StopWatch();
-		stopwatch.start();
-		stopwatch.stop();
-	});
-});
 

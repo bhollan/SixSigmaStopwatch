@@ -58,8 +58,6 @@ Ziggy.prototype.buildZiggy = function(mean, widthA, widthB, numberOfLayers, popu
 	while (this.points.length < this.population) {
 		this.newPoint();
 	};
-//	console.log(this.arrayOfLayers);
-//	console.log(this.count);
 };
 //Ziggy.prototype.arrayOfLayers = [[0], [0], [0], [0], [0], [0], [0], [0], [0]];
 //Ziggy.prototype.count = 0;
