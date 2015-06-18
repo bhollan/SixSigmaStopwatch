@@ -182,8 +182,8 @@ function redraw(input) {
 			.transition()
 			.duration(200)
 				.attr("width", function(d) {
-            return x(d.dx + x.domain()[0]);      //this is one of the strangest lines of code I've ever written
-            }) //barWidth
+                    return x(d.dx + x.domain()[0]);
+                    })
 				.attr("height", function(d) {return height - y(d.y)});
     
         bar = d3.selectAll(".barheights").data(data)
@@ -195,7 +195,6 @@ function redraw(input) {
     
         d3.select('.axis')
             .attr("transform","translate (0," + height + ")")
-            
             .transition()
             .duration(200)
             .call(xAxis);
@@ -204,12 +203,12 @@ function redraw(input) {
 //Generates/plots chart on pageload
 
 createStopwatch();
-    function sampleGenerator() {
-        var values = d3.range(1000).map(d3.random.irwinHall(11,1.2));
-        return values.map(function(d) {return Math.round(d*1000)});
-    };
+function sampleGenerator() {
+    var values = d3.range(1000).map(d3.random.irwinHall(11,1.2));
+    return values.map(function(d) {return Math.round(d*1000)});
+};
 var values = sampleGenerator();
-stopwatch.importTestArray(values);  //this is done to save exception code in remove()
+stopwatch.importTestArray(values);
 redraw(stopwatch.splits);
   
     //for each bar that is selected for removal, we must remove the data from stopwatch.splits
@@ -233,9 +232,7 @@ function clearTimes() {
         );
     };
     
-    console.log("before: " + stopwatch.splits.length);
     stopwatch.splits = stopwatch.splits.filter(checkTimes);
-    console.log(" after: " + stopwatch.splits.length);
 };
 
 </script>
