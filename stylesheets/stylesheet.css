@@ -149,8 +149,8 @@ rect:hover {
 	font-family: arial, verdana, tahoma;
 	font-size: 30px;
 	border-radius: 5px 5px 0px 0px;
-    margin-left:  20px;
-    margin-right: 20px;
+    margin-left:  10px;
+    margin-right: 10px;
     display:inline-block;
 }
 
@@ -165,10 +165,27 @@ rect:hover {
 	font-family: arial, verdana, tahoma;
 	font-size: 15px;
 	border-radius: 5px;
-    margin-left:  0px;
+    margin-left:  10px;
+    margin-right: 10px;
+    display:inline-block;
+}
+
+#load_sample {
+    -webkit-user-select:none;   /*<-- This property is not 100% cross-browser*/
+                                /*There are workarounds, but they're huge, clunky, and not worth my time for a demo project*/
+	margin-top: 5px;
+    margin-bottom: 0px;
+    cursor: pointer;
+	padding: 20px 15px;
+	background: #b3b3b3;
+	font-family: arial, verdana, tahoma;
+	font-size: 15px;
+	border-radius: 5px;
+    margin-left:  10px;
     margin-right: 0px;
     display:inline-block;
 }
+
 
 input[name="controls"] {display: none;}
 

@@ -15,17 +15,29 @@ The below wall of seeming garbage is the actual encoded image for the favicon
 </head>
 
 
-<body onload="firstRun(true);">
+<body>
     <a id="forkme_banner" href="https://github.com/bhollan/SixSigmaStopwatch">View on GitHub</a>
 
 <script>
 
+var sampleLoaded = true;
+var adder = 0;
 createStopwatch = function () {
 stopwatch = new StopWatch();
 };
 
-firstRun = function (input) {
-    var notRunYet = input;
+sample = function (input) {
+    
+    if (input) {                        //(re)load (new) sample
+        stopwatch.importTestArray(sampleGenerator());
+        sampleLoaded = input;
+        return;
+    };
+    
+    if (!input && sampleLoaded) {       //remove sample data
+        stopwatch.splits = [];
+        sampleLoaded = input;
+    };
 };
     
     //this function 'restarts' the css animation of the top display
@@ -99,7 +111,9 @@ svg.append("g")                       //add x-axis
             .style("text-anchor","end");
 
 function redraw(input) {
-	
+	    
+        d3.selectAll("#bright").attr("id","");
+        
 		//it doesnt make any sense to make a histogram of 2 points (0-point trimmed off in next segment)
 		if (input.length < 4) {
 			return;
@@ -139,10 +153,10 @@ function redraw(input) {
         function barClicked(input) {
             //this is the anonymous function that barClicked returns
             return function() {
-                var brightCount = d3.selectAll("#bright")[0].length;
-                d3.select(this.firstChild).attr("id","bright");
-                if (brightCount === d3.selectAll("#bright")[0].length) {
-                    d3.select(this.firstChild).attr("id","")
+                var brightCount = d3.selectAll("#bright")[0].length;        //select and count 'bright's already bright
+                d3.select(this.firstChild).attr("id","bright");             //set clicked bar to 'bright'
+                if (brightCount === d3.selectAll("#bright")[0].length) {    //if count didn't change, bright bar clicked
+                    d3.select(this.firstChild).attr("id","")                //so un'bright' the bar
                 };
                 d3.event.stopPropagation();
             };
@@ -206,6 +220,7 @@ createStopwatch();
 function sampleGenerator() {
     var values = d3.range(1000).map(d3.random.irwinHall(11,1.2));
     return values.map(function(d) {return Math.round(d*1000)});
+    
 };
 var values = sampleGenerator();
 stopwatch.importTestArray(values);
@@ -216,7 +231,7 @@ redraw(stopwatch.splits);
     //the bar wil remove itself when redraw() is called once the data is removed.
 function clearTimes() {
     var toClear = d3.selectAll("#bright");
-        if ( toClear[0].length === 0 ) {return;} ;
+        if ( toClear[0].length === 0 ) { return; } ;
     toClear.attr("id","");                                                          //remove 'bright' id
     
     var corners = toClear[0].map(function(d,i){return d.parentNode.__data__.x;})    //extract the bottom-left corner's x location
@@ -242,7 +257,7 @@ function clearTimes() {
 <title>Testing, attention please sir!</title>
 
 <div class="container" id="container">
-	<input id="start" name="controls" type="radio" onClick="stopwatch.start(); resetSplitDisplay(); firstRun(false); redraw(stopwatch.splits);" />
+	<input id="start" name="controls" type="radio" onClick="sample(false); stopwatch.start(); resetSplitDisplay(); redraw(stopwatch.splits);" />
 	<input id="stop" name="controls" type="radio" onClick="stopwatch.stop();  redraw(stopwatch.splits);" />
 	<input id="reset" name="controls" type="radio" onClick="stopwatch.reset();  redraw(stopwatch.splits);" />
     <div id="timer_controls">
@@ -250,7 +265,8 @@ function clearTimes() {
 		<label for="stop">Stop</label>
 		<label for="reset">Reset</label>
 	</div>
-    <div id = "clear_times" onClick="clearTimes(); redraw(stopwatch.splits);">Remove Selected<br> Bar(s)/Time(s)</div>
+    <div id = "clear_times" onClick="clearTimes(); redraw(stopwatch.splits);">Remove<br>Selected</div>
+    <div id = "load_sample" onClick="sample(true); redraw(stopwatch.splits);">Load<br>Sample</div>
     <div class="timer">
 		<div class="cell">
 			<div class="numbers tenhour moveten">0 1 2 3 4 5 6 7 8 9</div>
